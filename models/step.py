@@ -31,3 +31,7 @@ class Step:
     error: Optional[str] = None
     api_calls_made: int = 0              # learning signal
     duration_seconds: float = 0.0       # learning signal
+    assigned_agent: Optional[str] = None
+    confidence_score: float = 1.0
+    confidence_reason: Optional[str] = None
+    rollback_registered: bool = False

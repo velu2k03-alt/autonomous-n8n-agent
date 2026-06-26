@@ -1,9 +1,20 @@
-export default function MemoryViewer({ memory }) {
+export default function MemoryViewer({ memory, onClearMemory }) {
   if (!memory) return null
   const { execution_memory: em, capability_memory: cm } = memory
   return (
     <div style={{ background: "#111827", border: "1px solid #374151", borderRadius: 8, padding: 20 }}>
-      <h3 style={{ margin: "0 0 16px", color: "#e2e8f0" }}>Memory State</h3>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+        <h3 style={{ margin: 0, color: "#e2e8f0" }}>Memory State</h3>
+        <button onClick={onClearMemory} style={{
+          background: "#7f1d1d", color: "#fca5a5", border: "1px solid #991b1b",
+          padding: "5px 10px", borderRadius: 6, cursor: "pointer", fontSize: 11, fontWeight: "600",
+          transition: "all 0.2s"
+        }}
+        onMouseOver={e => { e.target.style.background = "#991b1b"; e.target.style.color = "#ffffff" }}
+        onMouseOut={e => { e.target.style.background = "#7f1d1d"; e.target.style.color = "#fca5a5" }}>
+          Clear Memory
+        </button>
+      </div>
       <div style={{ marginBottom: 16 }}>
         <h4 style={{ color: "#818cf8", margin: "0 0 8px", fontSize: 13 }}>
           Execution Memory — {em?.count} records

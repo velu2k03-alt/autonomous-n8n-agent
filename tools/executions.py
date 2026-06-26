@@ -11,8 +11,11 @@ def list_executions(workflow_id: Optional[str] = None,
     List execution records.
     status options: 'success', 'error', 'waiting', 'running', 'canceled'
     """
+    if limit > 250:
+        print(f"         [Defensive Capping] Limiting execution request count from {limit} to 250 to avoid n8n API 400 error")
+        limit = 250
     url = f"{_base()}/api/v1/executions"
-    params: Dict[str, Any] = {"limit": limit, "includeData": False}
+    params: Dict[str, Any] = {"limit": limit, "includeData": "false"}
     if workflow_id:
         params["workflowId"] = workflow_id
     if status:
@@ -24,7 +27,7 @@ def get_execution(execution_id: str) -> Dict:
     """Get full execution details including node output data."""
     url = f"{_base()}/api/v1/executions/{execution_id}"
     return _check(requests.get(url, headers=_headers(),
-                               params={"includeData": True}), url)
+                               params={"includeData": "true"}), url)
 
 
 def get_recent_executions_for_workflow(workflow_id: str, limit: int = 5) -> List[Dict]:

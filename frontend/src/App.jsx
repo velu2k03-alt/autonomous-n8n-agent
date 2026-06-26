@@ -40,6 +40,18 @@ export default function App() {
     }
   }
 
+  const handleClearMemory = async () => {
+    if (!window.confirm("Are you sure you want to clear the agent's memory? This will reset all learned strategies, execution counts, and synthesised tools.")) return
+    try {
+      const res = await fetch(`${API}/memory`, { method: "DELETE" })
+      if (!res.ok) throw new Error("Failed to clear memory")
+      setReport(null)
+      await loadSideData()
+    } catch (e) {
+      alert("Error clearing memory: " + e.message)
+    }
+  }
+
   return (
     <div style={{ minHeight: "100vh", background: "#0f172a", color: "#f9fafb",
       fontFamily: "system-ui, -apple-system, sans-serif", padding: "32px 24px" }}>
@@ -58,7 +70,7 @@ export default function App() {
         <ExecutionReport report={report} />
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
           <LearningChart data={learning} />
-          <MemoryViewer memory={memory} />
+          <MemoryViewer memory={memory} onClearMemory={handleClearMemory} />
         </div>
       </div>
     </div>

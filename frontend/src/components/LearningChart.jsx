@@ -23,6 +23,46 @@ export default function LearningChart({ data }) {
           <Line type="monotone" dataKey="calls" stroke="#818cf8" strokeWidth={2} dot={{ fill: "#818cf8" }} />
         </LineChart>
       </ResponsiveContainer>
+
+      {/* Add a BEFORE / AFTER section to show API call reduction */}
+      {data?.runs?.length >= 2 && (() => {
+        const first = data.runs[0]
+        const last = data.runs[data.runs.length - 1]
+        const improved = last.total_api_calls < first.total_api_calls
+        const pct = first.total_api_calls > 0
+          ? Math.round((first.total_api_calls - last.total_api_calls) / first.total_api_calls * 100)
+          : 0
+        return (
+          <div style={{
+            marginTop: 16, padding: 12,
+            background: improved ? "#064e3b" : "#1f2937",
+            borderRadius: 6, display: "flex",
+            justifyContent: "space-around", alignItems: "center"
+          }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 28, fontWeight: "bold", color: "#ef4444" }}>
+                {first.total_api_calls}
+              </div>
+              <div style={{ fontSize: 11, color: "#9ca3af" }}>calls — Run 1</div>
+            </div>
+            <div style={{ color: "#6b7280", fontSize: 20 }}>→</div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 28, fontWeight: "bold", color: "#22c55e" }}>
+                {last.total_api_calls}
+              </div>
+              <div style={{ fontSize: 11, color: "#9ca3af" }}>calls — Run {data.runs.length}</div>
+            </div>
+            {improved && (
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 24, fontWeight: "bold", color: "#818cf8" }}>
+                  -{pct}%
+                </div>
+                <div style={{ fontSize: 11, color: "#9ca3af" }}>improvement</div>
+              </div>
+            )}
+          </div>
+        )
+      })()}
     </div>
   )
 }

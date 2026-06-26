@@ -69,16 +69,28 @@ def get_workflow(workflow_id: str) -> Dict:
     return _check(requests.get(url, headers=_headers()), url)
 
 
-def get_workflow_by_name(name: str) -> Optional[Dict]:
+def get_workflow_by_name(name: str) -> Dict:
     """
     Find a workflow by display name.
-    n8n has no name filter on the API — we fetch all and filter locally.
-    This constraint is pre-loaded into capability memory at startup.
+
+    n8n has no name-based filter on the API -- we fetch all workflows
+    and filter locally. This constraint is pre-loaded into capability memory.
+
+    Raises N8NAPIError(404) if no workflow matches the name.
+    This is intentional: it allows the executor to record a clean failure
+    and the learning system to store the constraint "verify workflow exists".
     """
-    for wf in list_workflows():
+    workflows = list_workflows()
+    for wf in workflows:
         if wf.get("name", "").lower() == name.lower():
             return wf
-    return None
+    # Raise instead of returning None so executor handles it as a proper failure
+    raise N8NAPIError(
+        404,
+        f"No workflow named '{name}' found. "
+        f"Available workflows: {[w.get('name') for w in workflows[:10]]}",
+        f"get_workflow_by_name({name!r})"
+    )
 
 
 def create_workflow(name: str, nodes: List[Dict], connections: Dict,

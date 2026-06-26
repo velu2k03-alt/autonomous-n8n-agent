@@ -1,32 +1,28 @@
-annotated-doc==0.0.4
-annotated-types==0.7.0
-anyio==4.14.1
-certifi==2026.6.17
-charset-normalizer==3.4.7
-click==8.4.2
-colorama==0.4.6
-distro==1.9.0
-fastapi==0.138.0
-h11==0.16.0
-httpcore==1.0.9
-httpx==0.28.1
-idna==3.18
-jiter==0.15.0
-markdown-it-py==4.2.0
-mdurl==0.1.2
-openai==2.44.0
-pydantic==2.13.4
-pydantic_core==2.46.4
-Pygments==2.20.0
-python-dotenv==1.2.2
-requests==2.34.2
-rich==15.0.0
-shellingham==1.5.4
-sniffio==1.3.1
-starlette==1.3.1
-tqdm==4.68.3
-typer==0.26.7
-typing-inspection==0.4.2
-typing_extensions==4.15.0
-urllib3==2.7.0
-uvicorn==0.49.0
+# Core HTTP client
+requests>=2.31.0
+
+# LLM API (NVIDIA NIM — primary)
+# Uses NVIDIA_API_KEY env var; compatible with any OpenAI-format API
+# Set LLM_MODEL and LLM_API_ENDPOINT in .env to use a different provider
+
+# If using Anthropic Claude directly (alternative to NVIDIA):
+# anthropic>=0.20.0
+
+# Web framework
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+
+# Data validation
+pydantic>=2.0.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# CLI framework
+typer>=0.9.0
+
+# Rich terminal output
+rich>=13.7.0
+
+# Standard library extensions (no install needed):
+# json, os, re, time, inspect, traceback, datetime — all built-in
